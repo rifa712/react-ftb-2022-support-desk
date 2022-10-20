@@ -12,7 +12,6 @@ const app = express()
 // middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(errorHandler)
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -23,4 +22,5 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/users', require('./routes/userRoutes'))
 
+app.use(errorHandler)
 app.listen(PORT, () => console.log(`server started on port : ${PORT}`))
