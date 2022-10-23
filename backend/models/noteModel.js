@@ -16,7 +16,7 @@ const noteSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add some text'],
     },
-    isTaff: {
+    isStaff: {
       type: Boolean,
       default: false,
     },

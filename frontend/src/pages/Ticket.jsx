@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { getTicket, closeTicket } from '../features/ticket/ticketSlice'
-import { getTicketNotes, reset as noteReset } from '../features/notes/noteSlice'
+import {
+  getNotes,
+  createNote,
+  reset as noteReset,
+} from '../features/notes/noteSlice'
 import { useParams, useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import Spinner from '../components/Spinner'
@@ -46,7 +50,7 @@ const Ticket = () => {
     }
 
     dispatch(getTicket(ticketId))
-    dispatch(getTicketNotes(ticketId))
+    dispatch(getNotes(ticketId))
     // eslint-disable-next-line
   }, [message, isError, ticketId])
 
@@ -64,7 +68,7 @@ const Ticket = () => {
   // submit note
   const onNoteSubmit = (e) => {
     e.preventDefault()
-    console.log('submit')
+    dispatch(createNote({ noteText, ticketId }))
     toggleModal()
   }
 
