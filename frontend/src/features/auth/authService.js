@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'api/users'
+const API_URL = '/api/users/'
 
 // Register user
 const register = async (userData) => {
@@ -15,7 +15,7 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-  const res = await axios.post(API_URL + '/login', userData)
+  const res = await axios.post(API_URL + 'login', userData)
 
   if (res.data) {
     localStorage.setItem('user', JSON.stringify(res.data))

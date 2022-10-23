@@ -23,18 +23,19 @@ const NewTicket = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(message)
-    }
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error(message)
+  //   }
 
-    if (isSuccess) {
-      dispatch(reset())
-      navigate('/tickets')
-    }
+  //   if (isSuccess) {
+  //     toast.success('New ticket created!')
+  //     navigate('/tickets')
+  //     dispatch(reset())
+  //   }
 
-    dispatch(reset())
-  }, [isError, isSuccess, message, navigate, dispatch])
+  //   dispatch(reset())
+  // }, [isError, isSuccess, message, navigate, dispatch])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -44,6 +45,7 @@ const NewTicket = () => {
         description,
       })
     )
+    navigate('/tickets')
   }
 
   if (isLoading) {
