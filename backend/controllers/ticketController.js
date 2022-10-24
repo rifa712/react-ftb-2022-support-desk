@@ -7,14 +7,6 @@ const Ticket = require('../models/ticketModel')
 // @route   GET /api/tickets
 // @access  Private
 const getTickets = asyncHandler(async (req, res) => {
-  // Get user using id from JWT
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
   const tickets = await Ticket.find({ user: req.user.id })
 
   res.status(200).json(tickets)
@@ -24,14 +16,6 @@ const getTickets = asyncHandler(async (req, res) => {
 // @route   GET /api/tickets/:id
 // @access  Private
 const getTicket = asyncHandler(async (req, res) => {
-  // Get user using id from JWT
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
   const ticket = await Ticket.findById(req.params.id)
 
   if (!ticket) {
@@ -53,13 +37,6 @@ const getTicket = asyncHandler(async (req, res) => {
 const createTicket = asyncHandler(async (req, res) => {
   // Create a ticket
   const { product, description } = req.body
-  // Get user using id from JWT
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
 
   if (!product || !description) {
     res.status(400)
@@ -80,14 +57,6 @@ const createTicket = asyncHandler(async (req, res) => {
 // @route   PUT /api/tickets/:id
 // @access  Private
 const updateTicket = asyncHandler(async (req, res) => {
-  // Get user using id from JWT
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
   const ticket = await Ticket.findById(req.params.id)
 
   if (!ticket) {
@@ -111,14 +80,6 @@ const updateTicket = asyncHandler(async (req, res) => {
 // @route   DELETE /api/tickets/:id
 // @access  Private
 const deleteTicket = asyncHandler(async (req, res) => {
-  // Get user using id from JWT
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
   const ticket = await Ticket.findById(req.params.id)
 
   if (!ticket) {

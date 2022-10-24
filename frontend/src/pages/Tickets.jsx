@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getTickets, reset } from '../features/ticket/ticketSlice'
+import { getTickets } from '../features/ticket/ticketSlice'
 // components
 import Spinner from '../components/Spinner'
 import BackButton from '../components/BackButton'
@@ -8,9 +8,7 @@ import BackButton from '../components/BackButton'
 import TicketItem from '../components/TicketItem'
 
 const Tickets = () => {
-  const { tickets, isLoading, isSuccess, isError } = useSelector(
-    (state) => state.ticket
-  )
+  const { tickets } = useSelector((state) => state.tickets)
 
   const dispatch = useDispatch()
 
@@ -18,7 +16,7 @@ const Tickets = () => {
     dispatch(getTickets())
   }, [dispatch])
 
-  if (isLoading) {
+  if (!tickets) {
     return <Spinner />
   }
 

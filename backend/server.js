@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
-const colors = require('colors')
-const dotenv = require('dotenv').config()
+require('colors')
+require('dotenv').config()
 const PORT = process.env.PORT || 5000
 const connectDB = require('./config/db')
 const { errorHandler } = require('./middleware/errorMiddleware')
@@ -30,13 +30,11 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')))
 
   app.get('*', (req, res) =>
-    res.sendFile(__dirname, '../', 'frontend', 'build', 'index.html')
+    res.sendFile(__dirname, '../', '../frontend/build/index.html')
   )
 } else {
-  app.get('/', (req, res) => {
-    res.status(200).json({
-      message: 'Welcome to Support Desk API',
-    })
+  app.get('/', (_, res) => {
+    res.status(200).json({ message: 'Welcome to the Support Desk API' })
   })
 }
 

@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { getTicket, closeTicket } from '../features/ticket/ticketSlice'
-import {
-  getNotes,
-  createNote,
-  reset as noteReset,
-} from '../features/notes/noteSlice'
+import { getNotes, createNote } from '../features/notes/noteSlice'
 import { useParams, useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import Spinner from '../components/Spinner'
@@ -33,31 +29,45 @@ const Ticket = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [noteText, setNoteText] = useState('')
 
-  const { ticket, isLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.ticket
-  )
-  const { notes, isLoading: noteIsLoading } = useSelector(
-    (state) => state.notes
-  )
-  const { ticketId } = useParams()
+  const { ticket } = useSelector((state) => state.tickets)
+
+  const { notes } = useSelector((state) => state.notes)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { ticketId } = useParams()
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message)
-    }
-
-    dispatch(getTicket(ticketId))
-    dispatch(getNotes(ticketId))
+    dispatch(getTicket(ticketId)).unwrap().catch(toast.error)
+    dispatch(getNotes(ticketId)).unwrap().catch(toast.error)
     // eslint-disable-next-line
-  }, [message, isError, ticketId])
+  }, [dispatch, ticketId])
 
+  // Close ticket
   const onTicketClosed = () => {
+    // NOTE: we can unwrap our AsyncThunkACtion here so no need for isError and
+    // isSuccess state
     dispatch(closeTicket(ticketId))
-    toast.success('Ticket closed')
-    navigate('/tickets')
+      .unwrap()
+      .then(() => {
+        toast.success('Ticket Closed')
+        navigate('/tickets')
+      })
+      .catch(toast.error)
+  }
+
+  // Create note submit
+  const onNoteSubmit = (e) => {
+    // NOTE: we can unwrap our AsyncThunkACtion here so no need for isError and
+    // isSuccess state
+    e.preventDefault()
+    dispatch(createNote({ noteText, ticketId }))
+      .unwrap()
+      .then(() => {
+        setNoteText('')
+        toggleModal()
+      })
+      .catch(toast.error)
   }
 
   // open/close modal
@@ -65,19 +75,8 @@ const Ticket = () => {
     setModalIsOpen((prev) => !prev)
   }
 
-  // submit note
-  const onNoteSubmit = (e) => {
-    e.preventDefault()
-    dispatch(createNote({ noteText, ticketId }))
-    toggleModal()
-  }
-
-  if (isLoading) {
+  if (!ticket) {
     return <Spinner />
-  }
-
-  if (isError) {
-    return <h3>Something went wrong</h3>
   }
 
   return (

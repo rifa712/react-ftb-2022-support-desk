@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 // redux
 import { useSelector, useDispatch } from 'react-redux'
-import { createTicket, reset } from '../features/ticket/ticketSlice'
-import Spinner from '../components/Spinner'
+import { createTicket } from '../features/ticket/ticketSlice'
 // components
 import BackButton from '../components/BackButton'
 
 const NewTicket = () => {
   // redux
   const { user } = useSelector((state) => state.auth)
-  const { isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.ticket
-  )
 
   const [name] = useState(user.name)
   const [email] = useState(user.email)
@@ -23,33 +19,23 @@ const NewTicket = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if (isError) {
-  //     toast.error(message)
-  //   }
-
-  //   if (isSuccess) {
-  //     toast.success('New ticket created!')
-  //     navigate('/tickets')
-  //     dispatch(reset())
-  //   }
-
-  //   dispatch(reset())
-  // }, [isError, isSuccess, message, navigate, dispatch])
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+    // eslint-disable-next-line
+  }, [user])
 
   const onSubmit = (e) => {
     e.preventDefault()
-    dispatch(
-      createTicket({
-        product,
-        description,
+    dispatch(createTicket({ product, description }))
+      .unwrap()
+      .then(() => {
+        // We got a good response so navigate the user
+        navigate('/tickets')
+        toast.success('New ticket created!')
       })
-    )
-    navigate('/tickets')
-  }
-
-  if (isLoading) {
-    return <Spinner />
+      .catch(toast.error)
   }
 
   return (

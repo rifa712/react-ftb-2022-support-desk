@@ -6,7 +6,7 @@ import noteReducer from '../features/notes/noteSlice'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    ticket: ticketReducer,
+    tickets: ticketReducer,
     notes: noteReducer,
   },
 })
