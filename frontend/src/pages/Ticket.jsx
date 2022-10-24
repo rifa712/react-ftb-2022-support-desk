@@ -135,9 +135,11 @@ const Ticket = () => {
         </form>
       </Modal>
 
-      {notes.map((note) => (
-        <NoteItem key={note._id} note={note} />
-      ))}
+      {notes ? (
+        notes.map((note) => <NoteItem key={note._id} note={note} />)
+      ) : (
+        <Spinner />
+      )}
 
       {ticket.status !== 'closed' && (
         <button className='btn btn-block btn-danger' onClick={onTicketClosed}>

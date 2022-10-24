@@ -71,6 +71,7 @@ export const ticketSlice = createSlice({
         // NOTE: clear single ticket on tickets page, this replaces need for
         // loading state on individual ticket
         state.ticket = null
+        state.tickets = null
       })
       .addCase(getTickets.fulfilled, (state, action) => {
         state.tickets = action.payload
